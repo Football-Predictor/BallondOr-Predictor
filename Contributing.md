@@ -19,7 +19,7 @@ Follow these instructions if you **do not** have permissions to edit the remote 
 > **Note**:
 > This project uses GitHub Pull Requests to manage contributions, so [read up on how to fork a GitHub project and file a PR](https://guides.github.com/activities/forking) if you've never done it before
 
-> Install dependencies
+> **Install dependencies**
 ```sh
 $ pip install -r requirements.txt
 ```
