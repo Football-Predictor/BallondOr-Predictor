@@ -16,34 +16,35 @@ STATS = {
 }
 
 
-def getTable(url):
-    res = requests.get(url)
-    comm = re.compile("<!--|-->")
-    soup = BeautifulSoup(comm.sub("",res.text),'lxml')
-    allTables = soup.findAll("tbody")
-    playerTable = allTables[2]
-    print(playerTable)
-    return playerTable
-
-def getFrame(category, playerTable):
-    dfDict = {}
-    features = STATS[category]
-    rows = playerTable.find_all('tr')
-    for row in rows:
-        if row.find('th',{"scope":"row"}):
-            for f in features:
-                cell = row.find("td",{"data-stat": f})
-                text = cell.text.strip().encode().decode("utf-8")
-                if (text == ''):
-                    text = '0'
-                if f in dfDict:
-                    dfDict[f].append(text)
-                else:
-                    dfDict[f] = [text]
-    playerdf = pd.DataFrame.from_dict(dfDict)
-    return playerdf
-
 def categoryFrame(category, url):
+
+    def getTable(url):
+        res = requests.get(url)
+        comm = re.compile("<!--|-->")
+        soup = BeautifulSoup(comm.sub("",res.text),'lxml')
+        allTables = soup.findAll("tbody")
+        playerTable = allTables[2]
+        print(playerTable)
+        return playerTable
+
+    def getFrame(category, playerTable):
+        dfDict = {}
+        features = STATS[category]
+        rows = playerTable.find_all('tr')
+        for row in rows:
+            if row.find('th',{"scope":"row"}):
+                for f in features:
+                    cell = row.find("td",{"data-stat": f})
+                    text = cell.text.strip().encode().decode("utf-8")
+                    if (text == ''):
+                        text = '0'
+                    if f in dfDict:
+                        dfDict[f].append(text)
+                    else:
+                        dfDict[f] = [text]
+        playerdf = pd.DataFrame.from_dict(dfDict)
+        return playerdf
+    
     url = (url[0] + category + url[1])
     playerTable = getTable(url)
     dfPlayer = getFrame(category, playerTable)
