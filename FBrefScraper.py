@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 
+# URLs of Top 5 European Leagues, the second string is concatenated with the season and
+# stat we are looking for
 LEAGUE_URLS = {
     "Premier League": ["https://fbref.com/en/comps/9/","Premier-League-Stats"],
     "Bundesliga": ["https://fbref.com/en/comps/20/","Bundesliga-Stats"],
@@ -11,23 +13,26 @@ LEAGUE_URLS = {
     "Ligue 1": ["https://fbref.com/en/comps/13/", "Ligue-1-Stats"]
 }
 
+# Stats to be scraped from FBref.com, key is the category, value is a lsit of stat names to be pulled
 STATS = {
     "stats": ["player", "nationality"]
 }
 
 
 def categoryFrame(category, url):
-
+    """Returns a dataframe of a given category"""
     def getTable(url):
+        """Returns the table containing player stats"""
         res = requests.get(url)
         comm = re.compile("<!--|-->")
         soup = BeautifulSoup(comm.sub("",res.text),'lxml')
         allTables = soup.findAll("tbody")
         playerTable = allTables[2]
-        print(playerTable)
         return playerTable
 
     def getFrame(category, playerTable):
+        """Returns a dataframe of a given category, from the
+        table containing player stats"""
         dfDict = {}
         features = STATS[category]
         rows = playerTable.find_all('tr')
@@ -51,6 +56,7 @@ def categoryFrame(category, url):
     return dfPlayer
 
 def getPlayerData(url):
+    """Returns a dataframe of all stats for players in a given league"""
     df1 = categoryFrame("stats", url)
     # TODO add stats to STATS and call all here
     df = pd.concat([df1], axis=1)
