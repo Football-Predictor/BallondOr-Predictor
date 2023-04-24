@@ -14,7 +14,7 @@ This guide should serve as a set of guidelines and instructions for all contribu
 The purpose of this guide is to establish a clear and consistent process for contributing to the project. This guide outlines how to setup the project locally, submit issues, branching conventions submit and review pull requests.
 
 ## Project Setup :hammer:
-Follow these instructions if you **do not** have permissions to edit the remote repository 
+Follow these instructions if you **do not** have permissions to edit the remote repository.
 
 > **Note**:
 > This project uses GitHub Pull Requests to manage contributions, so [read up on how to fork a GitHub project and file a PR](https://guides.github.com/activities/forking) if you've never done it before
@@ -25,7 +25,7 @@ $ pip install -r requirements.txt
 ```
 ## Code Contribution :construction:
 
-We welcome all contributions to the project. Follow the step-by-step guide below to ensure that your contribution fits the required standard and can be added to the project!
+We welcome all contributions to the project. Follow the step-by-step guide below to ensure your contribution fits the required standard and can be added to the project!
 
 ### **To contribute code**:
 - [Set up the project](#project-setup-hammer).
@@ -41,7 +41,7 @@ We welcome all contributions to the project. Follow the step-by-step guide below
     `bug`| This is for a bug fix
     `doc`| This is for creating & editing documentation
     `test`| This is a branch used for experimenting
-  - Your summary should be no more than 2-3 words and seperated by dashes.
+  - Your summary should be 2-3 words or less and separated by dashes.
   - Your ticket number can be found in the issues / projects tab of the repo.
   - Example:
     - `git checkout -b refac/readme-update/1`
@@ -51,9 +51,9 @@ We welcome all contributions to the project. Follow the step-by-step guide below
 
 - Add modified code for staging
   - `git add <path/to/file>`
-  - Note: Add each changed file individually, this will allow for better tracking of issues.
+  - Note: Add each changed file individually. This will allow for better tracking of issues.
 
-- Commit staged file with a descriptive message
+- Commit a staged file with a descriptive message
   - `git commit -m "your message"`
   - Guidelines for writing a commit message:
     -  You should use the [imperative mood](https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?id=HEAD#n183) for writing your commit messages.
