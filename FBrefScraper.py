@@ -12,7 +12,7 @@ LEAGUE_URLS = {
 }
 
 STATS = {
-    "stats": ["stat1", "stat2"]
+    "stats": ["player", "nationality"]
 }
 
 
@@ -21,7 +21,8 @@ def getTable(url):
     comm = re.compile("<!--|-->")
     soup = BeautifulSoup(comm.sub("",res.text),'lxml')
     allTables = soup.findAll("tbody")
-    playerTable = allTables[1]
+    playerTable = allTables[2]
+    print(playerTable)
     return playerTable
 
 def getFrame(category, playerTable):
@@ -32,8 +33,7 @@ def getFrame(category, playerTable):
         if row.find('th',{"scope":"row"}):
             for f in features:
                 cell = row.find("td",{"data-stat": f})
-                a = cell.text.strip().encode()
-                text=a.decode("utf-8")
+                text = cell.text.strip().encode().decode("utf-8")
                 if (text == ''):
                     text = '0'
                 if f in dfDict:
@@ -72,8 +72,14 @@ class FBrefScraper:
                 url[1] = f"/{season - 1}-{season}-{url[1]}"
                 outfieldStatsLeague = getPlayerData(url)
                 outfieldStatsLeague["season"] = season
-                outfieldStats = outfieldStats.append(outfieldStatsLeague, ignore_index=True)
+                outfieldStats = outfieldStats._append(outfieldStatsLeague, ignore_index=True)
         if csvPath:
             outfieldStats.to_csv(csvPath, index=False)
-        return outfieldStats        
+        return outfieldStats       
 
+
+if __name__ == "__main__":
+    leagues = ["Premier League"]
+    seasons = [2021]
+    scraper = FBrefScraper(leagues, seasons)
+    outfieldStats = scraper.scrapePlayers("players.csv")
