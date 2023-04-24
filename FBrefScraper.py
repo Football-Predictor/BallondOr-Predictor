@@ -4,11 +4,11 @@ import pandas as pd
 import re
 
 LEAGUE_URLS = {
-    "Premier League": "https://fbref.com/en/comps/9/",
-    "Bundesliga": "https://fbref.com/en/comps/20/",
-    "La Liga": "https://fbref.com/en/comps/12/",
-    "Serie A": "https://fbref.com/en/comps/11/",
-    "Ligue 1": "https://fbref.com/en/comps/13/"
+    "Premier League": ["https://fbref.com/en/comps/9/","Premier-League-Stats"],
+    "Bundesliga": ["https://fbref.com/en/comps/20/","Bundesliga-Stats"],
+    "LaLiga": ["https://fbref.com/en/comps/12/","La-Liga-Stats"],
+    "Serie A": ["https://fbref.com/en/comps/11/","Serie-A-Stats"],
+    "Ligue 1": ["https://fbref.com/en/comps/13/", "Ligue-1-Stats"]
 }
 
 STATS = {
@@ -68,7 +68,8 @@ class FBrefScraper:
         for league in self.leagues:
             for season in self.seasons:
                 print(f"Scraping {league}, {season - 1}/{season}...")
-                url = LEAGUE_URLS[league] + f"{season - 1}-{season}"
+                url = LEAGUE_URLS[league]
+                url[1] = f"/{season - 1}-{season}-{url[1]}"
                 outfieldStatsLeague = getPlayerData(url)
                 outfieldStatsLeague["season"] = season
                 outfieldStats = outfieldStats.append(outfieldStatsLeague, ignore_index=True)
