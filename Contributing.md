@@ -14,7 +14,6 @@ This guide should serve as a set of guidelines and instructions for all contribu
 The purpose of this guide is to establish a clear and consistent process for contributing to the project. This guide outlines how to setup the project locally, submit issues, branching conventions submit and review pull requests.
 
 ## Project Setup :hammer:
-### **For everyone else:**
 Follow these instructions if you **do not** have permissions to edit the remote repository 
 
 > **Note**:
