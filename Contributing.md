@@ -28,7 +28,7 @@ $ pip install -r requirements.txt
 We welcome all contributions to the project. Follow the step-by-step guide below to ensure that your contribution fits the required standard and can be added to the project!
 
 ### **To contribute code**:
-- [Set up the project](#project-setup).
+- [Set up the project](#project-setup-hammer).
 - Identify any required modifications in the source code. 
 
 - Create and checkout a new branch.
