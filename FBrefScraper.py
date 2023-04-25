@@ -59,7 +59,6 @@ def categoryFrame(category, url):
         return playerdf
     
     url = url[0] + category + url[1]
-    print(url)
     playerTable = getTable(url)
     dfPlayer = getFrame(category, playerTable)
     return dfPlayer
@@ -99,9 +98,3 @@ class FBrefScraper:
         if csvPath:
             outfieldStats.to_csv(csvPath, index=False)
         return outfieldStats       
-
-if __name__ == "__main__":
-    leagues = ["Premier League"]
-    seasons = [2021]
-    scraper = FBrefScraper(leagues, seasons)
-    outfieldStats = scraper.scrapePlayers("outfieldStats.csv")
