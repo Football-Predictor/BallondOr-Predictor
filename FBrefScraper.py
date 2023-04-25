@@ -15,7 +15,7 @@ LEAGUE_URLS = {
 
 # Stats to be scraped from FBref.com, key is the category, value is a lsit of stat names to be pulled
 STATS = {
-    "stats": ["player", "nationality"]
+    "stats": ["player", "nationality", "position","squad","age","birth_year","games","games_starts","minutes","goals","assists","pens_made","pens_att","cards_yellow","cards_red","goals_per90","assists_per90","goals_assists_per90","goals_pens_per90","goals_assists_pens_per90","xg","npxg","xa","xg_per90","xa_per90","xg_xa_per90","npxg_per90","npxg_xa_per90"]
 }
 
 
