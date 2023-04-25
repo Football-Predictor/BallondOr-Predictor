@@ -18,7 +18,9 @@ STATS = {
     "stats": ["player", "nationality", "position","squad","age","birth_year","games","games_starts","minutes","goals","assists","pens_made","pens_att","cards_yellow","cards_red","goals_per90","assists_per90","goals_assists_per90","goals_pens_per90","goals_assists_pens_per90","xg","npxg","xa","xg_per90","xa_per90","xg_xa_per90","npxg_per90","npxg_xa_per90"],
     "shooting": ["minutes_90s","goals","pens_made","pens_att","shots_total","shots_on_target","shots_free_kicks","shots_on_target_pct","shots_total_per90","shots_on_target_per90","goals_per_shot","goals_per_shot_on_target","xg","npxg","npxg_per_shot","xg_net","npxg_net"],
     "passing":["passes_completed","passes","passes_pct","passes_total_distance","passes_progressive_distance","passes_completed_short","passes_short","passes_pct_short","passes_completed_medium","passes_medium","passes_pct_medium","passes_completed_long","passes_long","passes_pct_long","assists","xa","xa_net","assisted_shots","passes_into_final_third","passes_into_penalty_area","crosses_into_penalty_area","progressive_passes"],
-    "passingTypes": ["passes","passes_live","passes_dead","passes_free_kicks","through_balls","passes_pressure","passes_switches","crosses","corner_kicks","corner_kicks_in","corner_kicks_out","corner_kicks_straight","passes_ground","passes_low","passes_high","passes_left_foot","passes_right_foot","passes_head","throw_ins","passes_other_body","passes_completed","passes_offsides","passes_oob","passes_intercepted","passes_blocked"]
+    "passing_types": ["passes","passes_live","passes_dead","passes_free_kicks","through_balls","passes_pressure","passes_switches","crosses","corner_kicks","corner_kicks_in","corner_kicks_out","corner_kicks_straight","passes_ground","passes_low","passes_high","passes_left_foot","passes_right_foot","passes_head","throw_ins","passes_other_body","passes_completed","passes_offsides","passes_oob","passes_intercepted","passes_blocked"],
+    # goal and shot creation
+    "gca": ["sca","sca_per90","sca_passes_live","sca_passes_dead","sca_dribbles","sca_shots","sca_fouled","gca","gca_per90","gca_passes_live","gca_passes_dead","gca_dribbles","gca_shots","gca_fouled","gca_defense"]
 }
 
 
@@ -63,8 +65,9 @@ def getPlayerData(url):
     dfStats = categoryFrame("stats", url)
     dfShooting = categoryFrame("shooting", url)
     dfPassing = categoryFrame("passing", url)
-    dfPassingTypes = categoryFrame("passingTypes", url)
-    df = pd.concat([dfStats, dfShooting, dfPassing, dfPassingTypes], axis=1)
+    dfPassingTypes = categoryFrame("passing_types", url)
+    dfGCA = categoryFrame("gca", url)
+    df = pd.concat([dfStats, dfShooting, dfPassing, dfPassingTypes, dfGCA], axis=1)
     df = df.loc[:,~df.columns.duplicated()]
     return df
 
