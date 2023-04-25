@@ -22,7 +22,8 @@ STATS = {
     # goal and shot creation
     "gca": ["sca","sca_per90","sca_passes_live","sca_passes_dead","sca_dribbles","sca_shots","sca_fouled","gca","gca_per90","gca_passes_live","gca_passes_dead","gca_dribbles","gca_shots","gca_fouled","gca_defense"],
     "defence": ["tackles","tackles_won","tackles_def_3rd","tackles_mid_3rd","tackles_att_3rd","dribble_tackles","dribbles_vs","dribble_tackles_pct","dribbled_past","pressures","pressure_regains","pressure_regain_pct","pressures_def_3rd","pressures_mid_3rd","pressures_att_3rd","blocks","blocked_shots","blocked_shots_saves","blocked_passes","interceptions","clearances","errors"],
-    "possesion":  ["touches","touches_def_pen_area","touches_def_3rd","touches_mid_3rd","touches_att_3rd","touches_att_pen_area","touches_live_ball","dribbles_completed","dribbles","dribbles_completed_pct","players_dribbled_past","nutmegs","carries","carry_distance","carry_progressive_distance","progressive_carries","carries_into_final_third","carries_into_penalty_area","pass_targets","passes_received","passes_received_pct","miscontrols","dispossessed"]
+    "possesion":  ["touches","touches_def_pen_area","touches_def_3rd","touches_mid_3rd","touches_att_3rd","touches_att_pen_area","touches_live_ball","dribbles_completed","dribbles","dribbles_completed_pct","players_dribbled_past","nutmegs","carries","carry_distance","carry_progressive_distance","progressive_carries","carries_into_final_third","carries_into_penalty_area","pass_targets","passes_received","passes_received_pct","miscontrols","dispossessed"],
+    "misc": ["cards_yellow","cards_red","cards_yellow_red","fouls","fouled","offsides","crosses","interceptions","tackles_won","pens_won","pens_conceded","own_goals","ball_recoveries","aerials_won","aerials_lost","aerials_won_pct"]
 }
 
 
@@ -71,7 +72,8 @@ def getPlayerData(url):
     dfGCA = categoryFrame("gca", url)
     dfDefence = categoryFrame("defence", url)
     dfPossesion = categoryFrame("possesion", url)
-    df = pd.concat([dfStats, dfShooting, dfPassing, dfPassingTypes, dfGCA, dfDefence, dfPossesion], axis=1)
+    dfMisc = categoryFrame("misc", url)
+    df = pd.concat([dfStats, dfShooting, dfPassing, dfPassingTypes, dfGCA, dfDefence, dfPossesion, dfMisc], axis=1)
     df = df.loc[:,~df.columns.duplicated()]
     return df
 
