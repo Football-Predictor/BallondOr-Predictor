@@ -17,6 +17,7 @@ LEAGUE_URLS = {
 STATS = {
     "stats": ["player", "nationality", "position","squad","age","birth_year","games","games_starts","minutes","goals","assists","pens_made","pens_att","cards_yellow","cards_red","goals_per90","assists_per90","goals_assists_per90","goals_pens_per90","goals_assists_pens_per90","xg","npxg","xa","xg_per90","xa_per90","xg_xa_per90","npxg_per90","npxg_xa_per90"],
     "shooting": ["minutes_90s","goals","pens_made","pens_att","shots_total","shots_on_target","shots_free_kicks","shots_on_target_pct","shots_total_per90","shots_on_target_per90","goals_per_shot","goals_per_shot_on_target","xg","npxg","npxg_per_shot","xg_net","npxg_net"],
+    "passing":["passes_completed","passes","passes_pct","passes_total_distance","passes_progressive_distance","passes_completed_short","passes_short","passes_pct_short","passes_completed_medium","passes_medium","passes_pct_medium","passes_completed_long","passes_long","passes_pct_long","assists","xa","xa_net","assisted_shots","passes_into_final_third","passes_into_penalty_area","crosses_into_penalty_area","progressive_passes"]
 }
 
 
@@ -60,7 +61,8 @@ def getPlayerData(url):
     """Returns a dataframe of all stats for players in a given league"""
     dfStats = categoryFrame("stats", url)
     dfShooting = categoryFrame("shooting", url)
-    df = pd.concat([dfStats, dfShooting], axis=1)
+    dfPassing = categoryFrame("passing", url)
+    df = pd.concat([dfStats, dfShooting, dfPassing], axis=1)
     df = df.loc[:,~df.columns.duplicated()]
     return df
 
