@@ -94,8 +94,8 @@ class FBrefScraper:
         """Scrapes player data from FBref.com and writes to a given csv file.
         returns a dataframe of player data, for every league."""
         outfieldStats = pd.DataFrame()
-        for league in self.leagues:
-            for season in self.seasons:
+        for season in self.seasons:
+            for league in self.leagues:
                 print(f"Scraping {league}, {season - 1}/{season}...")
                 url = LEAGUE_URLS[league]
                 url[0] = f"{url[0]}{season - 1}-{season}/"
