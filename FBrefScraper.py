@@ -112,3 +112,11 @@ def addCSVToMongoDB(csvPath, connectionString, collectionName="BallondOrPredicto
     df = pd.read_csv(csvPath)
     data = df.to_dict(orient='records')
     collection.insert_many(data)
+
+
+def clearMongoDB(connectionString, collectionName="BallondOrPredictor",dbName="FootballPredictor"):
+    """Clears a mongoDB database"""
+    client = MongoClient(connectionString)
+    db = client[dbName]
+    collection = db[collectionName]
+    collection.delete_many({})
