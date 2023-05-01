@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 from pymongo import MongoClient
+import numpy as np
 
 # URLs of Top 5 European Leagues, the second string is concatenated with the season and
 # stat we are looking for
@@ -52,7 +53,10 @@ def categoryFrame(category, url):
             if row.find("th",{"scope":"row"}):
                 for f in features:
                     cell = row.find("td",{"data-stat": f})
-                    text = cell.text.strip().encode().decode("utf-8")
+                    if not cell:
+                        text = np.nan
+                    else:
+                        text = cell.text.strip().encode().decode("utf-8")
                     if (text == ''):
                         text = '0'
                     if f in dfDict:
@@ -120,3 +124,11 @@ def clearMongoDB(connectionString, collectionName="BallondOrPredictor",dbName="F
     db = client[dbName]
     collection = db[collectionName]
     collection.delete_many({})
+
+def main():
+    leagues = ["Premier League"]
+    seasons = [2021, 2020, 2019, 2018, 2017, 2016]
+    fbrefScraper = FBrefScraper(leagues, seasons)
+    outfieldStats = fbrefScraper.scrapePlayers("outfieldStats.csv")
+
+main()
