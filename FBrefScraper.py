@@ -124,11 +124,3 @@ def clearMongoDB(connectionString, collectionName="BallondOrPredictor",dbName="F
     db = client[dbName]
     collection = db[collectionName]
     collection.delete_many({})
-
-def main():
-    leagues = ["Premier League"]
-    seasons = [2021, 2020, 2019, 2018, 2017, 2016]
-    fbrefScraper = FBrefScraper(leagues, seasons)
-    outfieldStats = fbrefScraper.scrapePlayers("outfieldStats.csv")
-
-main()
