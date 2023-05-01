@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
+from pymongo import MongoClient
 
 # URLs of Top 5 European Leagues, the second string is concatenated with the season and
 # stat we are looking for
@@ -25,6 +26,9 @@ STATS = {
     "possession": ["touches", "touches_def_pen_area", "touches_def_3rd", "touches_mid_3rd", "touches_att_3rd", "touches_att_pen_area", "touches_live_ball", "take_ons", "take_ons_won", "take_ons_won_pct", "take_ons_tackled", "take_ons_tackled_pct", "carries", "carries_distance", "carries_progressive_distance", "progressive_carries", "carries_into_final_third", "carries_into_penalty_area", "miscontrols", "dispossessed", "passes_received", "progressive_passes_received"],
     "misc": ["cards_yellow", "cards_red", "cards_yellow_red", "fouls", "fouled", "offsides", "crosses", "interceptions", "tackles_won", "pens_won", "pens_conceded", "own_goals", "ball_recoveries", "aerials_won", "aerials_lost", "aerials_won_pct"]
 }
+
+# This will be removed for final version, this is our connection string to mongoDB
+CONNECTIONSTRING = r"mongodb+srv://anduarielsivansteven:aass123!@ballondor.csw3klm.mongodb.net/?retryWrites=true&w=majority"
 
 
 def categoryFrame(category, url):
@@ -97,4 +101,14 @@ class FBrefScraper:
                 outfieldStats = outfieldStats._append(outfieldStatsLeague, ignore_index=True)
         if csvPath:
             outfieldStats.to_csv(csvPath, index=False)
-        return outfieldStats       
+        return outfieldStats     
+
+
+def addCSVToMongoDB(csvPath, connectionString, collectionName="BallondOrPredictor",dbName="FootballPredictor"):
+    """Adds csv data to a mongoDB database"""
+    client = MongoClient(connectionString)
+    db = client[dbName]
+    collection = db[collectionName]
+    df = pd.read_csv(csvPath)
+    data = df.to_dict(orient='records')
+    collection.insert_many(data)
