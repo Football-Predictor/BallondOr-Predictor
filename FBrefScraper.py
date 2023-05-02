@@ -4,6 +4,7 @@ import pandas as pd
 import re
 from pymongo import MongoClient
 from copy import deepcopy
+from time import sleep
 
 # URLs of Top 5 European Leagues, the second string is concatenated with the season and
 # stat we are looking for
@@ -36,7 +37,7 @@ def categoryFrame(category, url):
     """Returns a dataframe of a given category"""
     def getTable(url):
         """Returns the table containing player stats"""
-        res = requests.get(url, headers={'User-agent': 'FootballPredictor'} )
+        res = requests.get(url)
         comm = re.compile("<!--|-->")
         soup = BeautifulSoup(comm.sub("",res.text),"lxml")
         allTables = soup.findAll("tbody")
@@ -94,9 +95,15 @@ class FBrefScraper:
     def scrapePlayers(self, csvPath=None):
         """Scrapes player data from FBref.com and writes to a given csv file.
         returns a dataframe of player data, for every league."""
+        count = 0
         outfieldStats = pd.DataFrame()
         for season in self.seasons:
             for league in self.leagues:
+                count += 1
+                # FBref blocks scraping more than 20 times in a minute, so we sleep for a minute every 20 scrapes
+                if count == 20:
+                    sleep(60)
+                    count = 0
                 print(f"Scraping {league}, {season - 1}/{season}...")
                 url = deepcopy(LEAGUE_URLS[league])
                 url[0] = f"{url[0]}{season - 1}-{season}/"
