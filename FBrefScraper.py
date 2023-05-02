@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
-from pymongo import MongoClient
 from copy import deepcopy
 from time import sleep
 
@@ -99,9 +98,10 @@ class FBrefScraper:
         outfieldStats = pd.DataFrame()
         for season in self.seasons:
             for league in self.leagues:
-                count += 1
+                count += 8
                 # FBref blocks scraping more than 20 times in a minute, so we sleep for a minute every 20 scrapes
-                if count == 20:
+                if count > 19:
+                    print("Sleeping for 60 seconds...")
                     sleep(60)
                     count = 0
                 print(f"Scraping {league}, {season - 1}/{season}...")
@@ -115,23 +115,4 @@ class FBrefScraper:
             outfieldStats.to_csv(csvPath, index=False)
         return outfieldStats     
 
-
-def addCSVToMongoDB(csvPath, connectionString, collectionName="BallondOrPredictor",dbName="FootballPredictor"):
-    """Adds csv data to a mongoDB database"""
-    client = MongoClient(connectionString)
-    db = client[dbName]
-    collection = db[collectionName]
-    df = pd.read_csv(csvPath)
-    data = df.to_dict(orient='records')
-    collection.insert_many(data)
-
-
-def clearMongoDB(connectionString, collectionName="BallondOrPredictor",dbName="FootballPredictor"):
-    """Clears a mongoDB database"""
-    client = MongoClient(connectionString)
-    db = client[dbName]
-    collection = db[collectionName]
-    collection.delete_many({})
-
 FBrefScraper(["Premier League", "Bundesliga", "LaLiga", "Serie A", "Ligue 1"], [2023, 2022, 2021, 2020, 2019, 2018]).scrapePlayers("outfieldData.csv")
-addCSVToMongoDB("outfieldData.csv", CONNECTIONSTRING)
