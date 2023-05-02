@@ -4,6 +4,7 @@ import pandas as pd
 import re
 from pymongo import MongoClient
 import numpy as np
+from copy import deepcopy
 
 # URLs of Top 5 European Leagues, the second string is concatenated with the season and
 # stat we are looking for
@@ -97,7 +98,7 @@ class FBrefScraper:
         for season in self.seasons:
             for league in self.leagues:
                 print(f"Scraping {league}, {season - 1}/{season}...")
-                url = LEAGUE_URLS[league]
+                url = deepcopy(LEAGUE_URLS[league])
                 url[0] = f"{url[0]}{season - 1}-{season}/"
                 url[1] = f"/{season - 1}-{season}-{url[1]}"
                 outfieldStatsLeague = getPlayerData(url)
