@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 from pymongo import MongoClient
-import numpy as np
 from copy import deepcopy
 
 # URLs of Top 5 European Leagues, the second string is concatenated with the season and
@@ -55,7 +54,7 @@ def categoryFrame(category, url):
                 for f in features:
                     cell = row.find("td",{"data-stat": f})
                     if not cell:
-                        text = np.nan
+                        text = 'NaN'
                     else:
                         text = cell.text.strip().encode().decode("utf-8")
                     if (text == ''):
@@ -125,3 +124,5 @@ def clearMongoDB(connectionString, collectionName="BallondOrPredictor",dbName="F
     db = client[dbName]
     collection = db[collectionName]
     collection.delete_many({})
+
+FBrefScraper(["Premier League"], [2017]).scrapePlayers("test.csv")
