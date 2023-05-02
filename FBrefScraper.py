@@ -36,7 +36,7 @@ def categoryFrame(category, url):
     """Returns a dataframe of a given category"""
     def getTable(url):
         """Returns the table containing player stats"""
-        res = requests.get(url)
+        res = requests.get(url, headers={'User-agent': 'FootballPredictor'} )
         comm = re.compile("<!--|-->")
         soup = BeautifulSoup(comm.sub("",res.text),"lxml")
         allTables = soup.findAll("tbody")
@@ -67,6 +67,7 @@ def categoryFrame(category, url):
         return playerdf
     
     url = url[0] + category + url[1]
+    print(url)
     playerTable = getTable(url)
     dfPlayer = getFrame(category, playerTable)
     return dfPlayer
@@ -125,4 +126,5 @@ def clearMongoDB(connectionString, collectionName="BallondOrPredictor",dbName="F
     collection = db[collectionName]
     collection.delete_many({})
 
-FBrefScraper(["Premier League"], [2017]).scrapePlayers("test.csv")
+FBrefScraper(["Premier League", "Bundesliga", "LaLiga", "Serie A", "Ligue 1"], [2023, 2022, 2021, 2020, 2019, 2018]).scrapePlayers("outfieldData.csv")
+addCSVToMongoDB("outfieldData.csv", CONNECTIONSTRING)
