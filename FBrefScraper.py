@@ -28,9 +28,6 @@ STATS = {
     "misc": ["cards_yellow", "cards_red", "cards_yellow_red", "fouls", "fouled", "offsides", "crosses", "interceptions", "tackles_won", "pens_won", "pens_conceded", "own_goals", "ball_recoveries", "aerials_won", "aerials_lost", "aerials_won_pct"]
 }
 
-# This will be removed for final version, this is our connection string to mongoDB
-CONNECTIONSTRING = r"mongodb+srv://anduarielsivansteven:aass123!@ballondor.csw3klm.mongodb.net/?retryWrites=true&w=majority"
-
 
 def categoryFrame(category, url):       
     """Returns a dataframe of a given category"""
