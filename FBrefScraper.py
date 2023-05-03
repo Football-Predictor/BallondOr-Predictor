@@ -32,40 +32,16 @@ STATS = {
 CONNECTIONSTRING = r"mongodb+srv://anduarielsivansteven:aass123!@ballondor.csw3klm.mongodb.net/?retryWrites=true&w=majority"
 
 
-count = 0
-
-def categoryFrame(category, url):
-    def getLeaguePosition(team, url):
-        """Returns the league position of a given team"""
-        url_list = url.split("/stats")
-        newUrl = ""
-        for element in url_list:
-            newUrl += element
-        res = requests.get(newUrl)
-        count += 1
-        if count > 19:
-            sleep(60)
-            print("Sleeping for 60 seconds...")
-            count = 0
-        comm = re.compile("<!--|-->")
-        soup = BeautifulSoup(comm.sub("",res.text),"lxml")
-        allTables = soup.findAll("tbody")
-        teamTable = allTables[0]
-        rows = teamTable.find_all("tr")
-        for row in rows:
-            if row.find("td",{"data-stat": "team"}):
-                teamName = row.find("td",{"data-stat": "team"}).text.strip().encode().decode("utf-8")
-                if teamName == team:
-                    return row.find("th",{"data-stat": "rank"}).text.strip().encode().decode("utf-8")
-        
+def categoryFrame(category, url):       
     """Returns a dataframe of a given category"""
     def getTable(url):
         """Returns the table containing player stats"""
+        count = 0
         res = requests.get(url)
         count += 1
-        if count > 19:
-            sleep(60)
+        if count == 19:
             print("Sleeping for 60 seconds...")
+            sleep(60)
             count = 0
         comm = re.compile("<!--|-->")
         soup = BeautifulSoup(comm.sub("",res.text),"lxml")
@@ -89,8 +65,6 @@ def categoryFrame(category, url):
                         text = cell.text.strip().encode().decode("utf-8")
                     if (text == ''):
                         text = '0'
-                    if f == "team":
-                        dfDict["league_position"] = getLeaguePosition(text, url)
                     if f in dfDict:
                         dfDict[f].append(text)
                     else:
