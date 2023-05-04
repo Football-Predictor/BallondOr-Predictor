@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import pandas as pd
+from pandas import json_normalize
 
 # This will be removed for final version, this is our connection string to mongoDB
 CONNECTIONSTRING = r"mongodb+srv://anduarielsivansteven:aass123!@ballondor.csw3klm.mongodb.net/?retryWrites=true&w=majority"
@@ -21,6 +22,10 @@ class MongoDB:
         """Clears a mongoDB database"""
         self.collection.delete_many({})
     
-    def pullMongoDB(self):
+    def pullMongoDB(self, filepath):
         """Pulls all data from a mongoDB database"""
+        data = self.collection.find({})
+        df = json_normalize(list(data))
+        df.drop(columns=['_id'], inplace=True)
+        df.to_csv(filepath, index=False, encoding="utf-8")
         return self.collection.find({})
