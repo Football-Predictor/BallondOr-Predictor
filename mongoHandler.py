@@ -28,4 +28,3 @@ class mongoHandler:
         df = json_normalize(list(data))
         df.drop(columns=['_id'], inplace=True)
         df.to_csv(filepath, index=False, encoding="utf-8")
-        return self.collection.find({})

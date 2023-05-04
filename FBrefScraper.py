@@ -57,7 +57,7 @@ def categoryFrame(category, url):
                 for f in features:
                     cell = row.find("td",{"data-stat": f})
                     if not cell:
-                        text = 'NaN'
+                        text = ''
                     else:
                         text = cell.text.strip().encode().decode("utf-8")
                     if (text == ''):
