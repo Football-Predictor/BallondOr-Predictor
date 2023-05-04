@@ -5,7 +5,7 @@ from pandas import json_normalize
 # This will be removed for final version, this is our connection string to mongoDB
 CONNECTIONSTRING = r"mongodb+srv://anduarielsivansteven:aass123!@ballondor.csw3klm.mongodb.net/?retryWrites=true&w=majority"
 
-class MongoDB:
+class mongoHandler:
     """A class to handle all mongoDB interactions"""
     def __init__(self, connectionString, collectionName="BallondOrPredictor",dbName="FootballPredictor"):
         self.client = MongoClient(connectionString)
