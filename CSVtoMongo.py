@@ -20,3 +20,7 @@ class MongoDB:
     def clearMongoDB(self):
         """Clears a mongoDB database"""
         self.collection.delete_many({})
+    
+    def pullMongoDB(self):
+        """Pulls all data from a mongoDB database"""
+        return self.collection.find({})
