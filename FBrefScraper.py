@@ -28,18 +28,11 @@ STATS = {
     "misc": ["cards_yellow", "cards_red", "cards_yellow_red", "fouls", "fouled", "offsides", "crosses", "interceptions", "tackles_won", "pens_won", "pens_conceded", "own_goals", "ball_recoveries", "aerials_won", "aerials_lost", "aerials_won_pct"]
 }
 
-
 def categoryFrame(category, url):       
     """Returns a dataframe of a given category"""
     def getTable(url):
         """Returns the table containing player stats"""
-        count = 0
         res = requests.get(url)
-        count += 1
-        if count == 19:
-            print("Sleeping for 60 seconds...")
-            sleep(60)
-            count = 0
         comm = re.compile("<!--|-->")
         soup = BeautifulSoup(comm.sub("",res.text),"lxml")
         allTables = soup.findAll("tbody")
@@ -61,7 +54,7 @@ def categoryFrame(category, url):
                     else:
                         text = cell.text.strip().encode().decode("utf-8")
                     if (text == ''):
-                        text = '0'
+                        text = ''
                     if f in dfDict:
                         dfDict[f].append(text)
                     else:
@@ -97,12 +90,18 @@ class FBrefScraper:
         """Scrapes player data from FBref.com and writes to a given csv file.
         returns a dataframe of player data, for every league."""
         outfieldStats = pd.DataFrame()
+        count = 0
         for season in self.seasons:
             for league in self.leagues:
                 print(f"Scraping {league}, {season - 1}/{season}...")
                 url = deepcopy(LEAGUE_URLS[league])
                 url[0] = f"{url[0]}{season - 1}-{season}/"
                 url[1] = f"/{season - 1}-{season}-{url[1]}"
+                count += 8
+                if count >= 19:
+                    print("Sleeping for 60 seconds...")
+                    sleep(60)
+                    count = 0
                 outfieldStatsLeague = getPlayerData(url)
                 outfieldStatsLeague["season"] = season
                 outfieldStats = outfieldStats._append(outfieldStatsLeague, ignore_index=True)
@@ -110,4 +109,4 @@ class FBrefScraper:
             outfieldStats.to_csv(csvPath, index=False)
         return outfieldStats     
 
-FBrefScraper(["Premier League"], [2021]).scrapePlayers("test.csv")
+FBrefScraper(["Premier League"], [2017,2016,2015,2014,2013,2012,2011]).scrapePlayers("test.csv")
