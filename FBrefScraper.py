@@ -96,6 +96,7 @@ class FBrefScraper:
                 url = deepcopy(LEAGUE_URLS[league])
                 url[0] = f"{url[0]}{season - 1}-{season}/"
                 url[1] = f"/{season - 1}-{season}-{url[1]}"
+                # FBref has a limit of 20 requests per minute
                 count += 8
                 if count >= 19:
                     print("Sleeping for 60 seconds...")
