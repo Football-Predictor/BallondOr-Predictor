@@ -85,7 +85,7 @@ class FBrefScraper:
         self.leagues = leagues
         self.seasons = seasons
     
-    def scrapePlayers(self, csvPath="outfieldStats.csv"):
+    def scrapePlayers(self, csvPath=None):
         """Scrapes player data from FBref.com and writes to a given csv file.
         returns a dataframe of player data, for every league."""
         outfieldStats = pd.DataFrame()
