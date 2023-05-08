@@ -59,8 +59,8 @@ def categoryFrame(category, url):
                         dfDict[f].append(text)
                     else:
                         dfDict[f] = [text]
-        playerdf = pd.DataFrame.from_dict(dfDict)
-        return playerdf
+        dfPlayer = pd.DataFrame.from_dict(dfDict)
+        return dfPlayer
     
     url = url[0] + category + url[1]
     playerTable = getTable(url)
