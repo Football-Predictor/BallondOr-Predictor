@@ -5,8 +5,7 @@ import re
 from copy import deepcopy
 from time import sleep
 
-# URLs of Top 5 European Leagues, the second string is concatenated with the season and
-# stat we are looking for
+# URLs of Top 5 European Leagues, split into two parts so that the category can be inserted in between
 LEAGUE_URLS = {
     "Premier League": ["https://fbref.com/en/comps/9/","Premier-League-Stats"],
     "Bundesliga": ["https://fbref.com/en/comps/20/","Bundesliga-Stats"],
