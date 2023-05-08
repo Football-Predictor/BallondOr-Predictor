@@ -108,4 +108,3 @@ class FBrefScraper:
             outfieldStats.to_csv(csvPath, index=False)
         return outfieldStats     
 
-FBrefScraper(["Premier League"], [2017,2016,2015,2014,2013,2012,2011]).scrapePlayers("test.csv")
