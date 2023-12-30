@@ -4,10 +4,13 @@ import pandas as pd
 import re
 from copy import deepcopy
 from time import sleep
+import logging
+from http.client import HTTPConnection
 
 # URLs of Top 5 European Leagues, the second string is concatenated with the season and
 # stat we are looking for
 LEAGUE_URLS = {
+    "Top 5": ["https://fbref.com/en/comps/Big5/", "Big-5-European-Leagues-Stats"],
     "Premier League": ["https://fbref.com/en/comps/9/","Premier-League-Stats"],
     "Bundesliga": ["https://fbref.com/en/comps/20/","Bundesliga-Stats"],
     "LaLiga": ["https://fbref.com/en/comps/12/","La-Liga-Stats"],
@@ -33,7 +36,6 @@ def categoryFrame(category, url):
     """Returns a dataframe of a given category"""
     def getTable(url):
         """Returns the table containing player stats"""
-        count = 0
         res = requests.get(url)
         count += 1
         if count == 19:
@@ -43,7 +45,10 @@ def categoryFrame(category, url):
         comm = re.compile("<!--|-->")
         soup = BeautifulSoup(comm.sub("",res.text),"lxml")
         allTables = soup.findAll("tbody")
-        playerTable = allTables[2]
+        if 'Big 5' in url[0]:
+            playerTable = allTables[1]
+        else:
+            playerTable = allTables[2]
         return playerTable
 
     def getFrame(category, playerTable):
@@ -76,14 +81,24 @@ def categoryFrame(category, url):
 
 def getPlayerData(url):
     """Returns a dataframe of all stats for players in a given league"""
-    dfStats = categoryFrame("stats", url)
-    dfShooting = categoryFrame("shooting", url)
-    dfPassing = categoryFrame("passing", url)
-    dfPassingTypes = categoryFrame("passing_types", url)
-    dfGCA = categoryFrame("gca", url)
-    dfDefense = categoryFrame("defense", url)
-    dfPossession = categoryFrame("possession", url)
-    dfMisc = categoryFrame("misc", url)
+    if "Big5" in url[0]:
+        dfStats = categoryFrame("stats/players/", url)
+        dfShooting = categoryFrame("stats/players/", url)
+        dfPassing = categoryFrame("stats/players", url)
+        dfPassingTypes = categoryFrame("stats/players/", url)
+        dfGCA = categoryFrame("stats/players/", url)
+        dfDefense = categoryFrame("stats/players/", url)
+        dfPossession = categoryFrame("stats/players/", url)
+        dfMisc = categoryFrame("stats/players/", url)
+    else:
+        dfStats = categoryFrame("stats", url)
+        dfShooting = categoryFrame("shooting", url)
+        dfPassing = categoryFrame("passing", url)
+        dfPassingTypes = categoryFrame("passing_types", url)
+        dfGCA = categoryFrame("gca", url)
+        dfDefense = categoryFrame("defense", url)
+        dfPossession = categoryFrame("possession", url)
+        dfMisc = categoryFrame("misc", url)
     df = pd.concat([dfStats, dfShooting, dfPassing, dfPassingTypes, dfGCA, dfDefense, dfPossession, dfMisc], axis=1)
     df = df.loc[:,~df.columns.duplicated()]
     return df
@@ -101,13 +116,14 @@ class FBrefScraper:
             for league in self.leagues:
                 print(f"Scraping {league}, {season - 1}/{season}...")
                 url = deepcopy(LEAGUE_URLS[league])
-                url[0] = f"{url[0]}{season - 1}-{season}/"
-                url[1] = f"/{season - 1}-{season}-{url[1]}"
+                if 'Big5' not in url[0]:
+                    url[0] = f"{url[0]}{season - 1}-{season}/"
+                    url[1] = f"/{season - 1}-{season}-{url[1]}"
                 outfieldStatsLeague = getPlayerData(url)
                 outfieldStatsLeague["season"] = season
                 outfieldStats = outfieldStats._append(outfieldStatsLeague, ignore_index=True)
         if csvPath:
             outfieldStats.to_csv(csvPath, index=False)
-        return outfieldStats     
+        return outfieldStats
 
-FBrefScraper(["Premier League"], [2021]).scrapePlayers("test.csv")
+FBrefScraper(["Big 5"], [2024]).scrapePlayers("test.csv")
