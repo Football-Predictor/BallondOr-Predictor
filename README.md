@@ -1,4 +1,4 @@
-# Ballond'Or-Predictor
+# Ballon d'Or Predictor
 
 ## Setup
 
