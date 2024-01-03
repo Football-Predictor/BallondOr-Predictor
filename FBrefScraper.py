@@ -37,6 +37,7 @@ def categoryFrame(category, url):
     def getTable(url):
         """Returns the table containing player stats"""
         res = requests.get(url)
+        count = 0
         count += 1
         if count == 19:
             print("Sleeping for 60 seconds...")
@@ -45,7 +46,8 @@ def categoryFrame(category, url):
         comm = re.compile("<!--|-->")
         soup = BeautifulSoup(comm.sub("",res.text),"lxml")
         allTables = soup.findAll("tbody")
-        if 'Big 5' in url[0]:
+        print(url)
+        if 'Big5' in url:
             playerTable = allTables[1]
         else:
             playerTable = allTables[2]
@@ -55,7 +57,8 @@ def categoryFrame(category, url):
         """Returns a dataframe of a given category, from the
         table containing player stats"""
         dfDict = {}
-        features = STATS[category]
+        feature_name = category.split("/")[0]
+        features = STATS[feature_name]
         rows = playerTable.find_all("tr")
         for row in rows:
             if row.find("th",{"scope":"row"}):
@@ -126,4 +129,4 @@ class FBrefScraper:
             outfieldStats.to_csv(csvPath, index=False)
         return outfieldStats
 
-FBrefScraper(["Big 5"], [2024]).scrapePlayers("test.csv")
+FBrefScraper(["Top 5"], [2024]).scrapePlayers("test.csv")
